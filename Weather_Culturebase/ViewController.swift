@@ -49,7 +49,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             print("About to set URLForNationalWeatherServiceForecast to \(newURLForNationalWeatherServiceForecast)")
         }
         didSet {
-            //startLoad6()
+            startLoad6()
         }
     }
     var slide1:Day = Bundle.main.loadNibNamed("Day", owner: self, options: nil)?.first as! Day
@@ -117,6 +117,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         
         startLoad4()
         startLoad5()
+        startLoad6()
         
         
         
@@ -160,12 +161,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             }
             
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-                print("Server error!")
+                print("Server error in startLOad!")
                 return
             }
             
             guard let mime = response.mimeType, mime == "application/json" else {
-                print("Wrong MIME type!")
+                print("Wrong MIME type in StartLoad()!")
                 return
             }
             
@@ -212,12 +213,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             }
             
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-                print("Server error!")
+                print("Server error in startload2 !")
                 return
             }
             
             guard let mime = response.mimeType, mime == "application/json" else {
-                print("Wrong MIME type!")
+                print("Wrong MIME type in startLoad2!")
                 return
             }
             
@@ -356,12 +357,12 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             }
             
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-                print("Server error!")
+                print("Server error in startload4!")
                 return
             }
             
             guard let mime = response.mimeType, mime == "application/json" else {
-                print("Wrong MIME type!")
+                print("Wrong MIME type in startLoad4!")
                 return
             }
  
@@ -427,16 +428,17 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
             }
             
             guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
-                print("Server error!")
+                print("Server error in startload5!")
                 return
             }
             
             /*
             guard let mime = response.mimeType, mime == "application/json" else {
-                print("Wrong MIME type!")
-                //return
+                print("Wrong MIME type in startload5!")
+                return
             }
-            */
+ */
+ 
             do {
                 let string1 = String(data: data!, encoding: String.Encoding.utf8) ?? "Data could not be printed"
                 print(string1)
@@ -451,23 +453,80 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                 print(json ?? "did not work")
                 
                 
-                if let urlToCheckForecasts = json?["properties"] as? [String:Any] {
+                if let properties = json?["properties"] as? [String:Any] {
                     print("properties:")
-                    print(urlToCheckForecasts)
-                    if let tempImperial = temp["Imperial"] as? [String:Any] {
-                        print("temperature Imperial:")
-                        print(tempImperial)
+                    print(properties)
+                    if let urlForAPIForecast = properties["forecastHourly"] as? String {
+                        print("urlForAPIForecast:")
+                        print(urlForAPIForecast)
+                        self.URLForNationalWeatherServiceForecast = urlForAPIForecast
                         
-                        if let tempF  = tempImperial["Value"] as? Int {
-                            print("temperature in degrees F:")
-                            print(tempF)
-                            //updating with today's forecast
-                            //ommiting the DispatchQueue will result in errors described in the following stack overflow question
-                            //https://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-from-a-background
-                            DispatchQueue.main.async {
-                                self.slide2.degrees.text = String(tempF) + " degrees F"
-                            }
-                        }
+                        
+                    }
+                    
+                }
+                
+                
+            } catch {
+                print("JSON error: \(error.localizedDescription)")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func startLoad6() {
+        let session = URLSession.shared
+     
+        
+        print(self.URLForNationalWeatherServiceForecast)
+        if (URLForNationalWeatherServiceForecast == "") {
+            print("opting out of startLoad6()")
+            return
+        }
+        let url = URL(string: self.URLForNationalWeatherServiceForecast)!
+        
+        let task = session.dataTask(with: url) { data, response, error in
+            
+            if error != nil || data == nil {
+                print("Client error!")
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
+                print("Server error in startload6 !")
+                return
+            }
+            
+            /*
+             guard let mime = response.mimeType, mime == "application/json" else {
+             print("Wrong MIME type in startLoad6!")
+             return
+             }
+ */
+ 
+            do {
+                let string1 = String(data: data!, encoding: String.Encoding.utf8) ?? "Data could not be printed"
+                print(string1)
+                //string1.remove(at: string1.startIndex)
+                //string1.remove(at: string1.index(before: string1.endIndex))
+                //print(string1)
+                //var data2: Data? = string1.data(using: .utf8)
+                let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                
+                
+                print("second round of api call")
+                print(json ?? "did not work")
+                
+                
+                if let properties = json?["properties"] as? [String:Any] {
+                    print("properties:")
+                    print(properties)
+                    if let urlForAPIForecast = properties["forecastHourly"] as? String {
+                        print("urlForAPIForecast:")
+                        print(urlForAPIForecast)
+                        self.URLForNationalWeatherServiceForecast = urlForAPIForecast
+                        
                         
                     }
                     
@@ -524,6 +583,8 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                 startLoad2()
                 //startLoad3()
                 startLoad4()
+                startLoad5()
+                startLoad6()
                 numberOfTimesCalledAPI += 1;
             } else if (true){
                 print(Double(timestamp) - NSDate().timeIntervalSince1970)
