@@ -12,6 +12,7 @@ class Day: UIView {
 
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var degrees: UILabel!
+    @IBOutlet weak var descriptionOfWeather: UILabel!
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

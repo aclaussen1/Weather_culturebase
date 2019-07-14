@@ -22,8 +22,14 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today's Weather" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRV-yF-CLW">
-                    <rect key="frame" x="112" y="438" width="190" height="20"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kyO-cy-m4L">
+                    <rect key="frame" x="20" y="496" width="374" height="41"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Today's Weather" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRV-yF-CLW">
+                    <rect key="frame" x="20" y="438" width="374" height="20"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -31,18 +37,21 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="tRV-yF-CLW" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="112" id="BbT-qn-478"/>
                 <constraint firstItem="tRV-yF-CLW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="QQ8-ph-Cpt"/>
                 <constraint firstItem="tRV-yF-CLW" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="T9i-1N-kLZ"/>
+                <constraint firstItem="kyO-cy-m4L" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="WHi-tX-L5L"/>
                 <constraint firstItem="tRV-yF-CLW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="cAA-oe-EF6"/>
                 <constraint firstItem="tRV-yF-CLW" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="gbj-cF-cNw"/>
                 <constraint firstItem="tRV-yF-CLW" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="394" id="iiJ-B5-Jsy"/>
+                <constraint firstItem="kyO-cy-m4L" firstAttribute="firstBaseline" secondItem="4kN-yL-1Ox" secondAttribute="baseline" constant="24" symbolType="layoutAnchor" id="jO2-VB-J41"/>
+                <constraint firstItem="tRV-yF-CLW" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="nb0-bu-Wl2"/>
                 <constraint firstItem="4kN-yL-1Ox" firstAttribute="top" secondItem="tRV-yF-CLW" secondAttribute="bottom" constant="8" symbolic="YES" id="phg-dq-Xua"/>
                 <constraint firstItem="tRV-yF-CLW" firstAttribute="centerX" secondItem="4kN-yL-1Ox" secondAttribute="centerX" id="sex-ad-n4c"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="degrees" destination="4kN-yL-1Ox" id="rT8-bA-Gfh"/>
+                <outlet property="descriptionOfWeather" destination="kyO-cy-m4L" id="XXt-KQ-pfl"/>
                 <outlet property="mainLabel" destination="tRV-yF-CLW" id="3JF-Bt-lzc"/>
             </connections>
             <point key="canvasLocation" x="47.826086956521742" y="35.491071428571423"/>

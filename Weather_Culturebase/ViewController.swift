@@ -41,7 +41,16 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     var longitude: Double = -84.3880
     //san francisco key
     //var locationKey: String = "2628204"
-    var locationKey: String = "2625833"
+
+    
+    public  var locationKey: String = "2625833" {
+        willSet(newLocationKey) {
+            print("About to set URLForNationalWeatherServiceForecast to \(newLocationKey)")
+        }
+        didSet {
+            startLoad6()
+        }
+    }
     var dataTask: URLSessionDataTask?
     var degrees: Int = 0
     public  var URLForNationalWeatherServiceForecast: String = "" {
@@ -64,13 +73,15 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     func createSlides() -> [Day] {
         
         
-        slide1.mainLabel.text = "Today's Weather"
+        slide2.mainLabel.text = "Today's Weather"
         slide1.degrees.text = "Loading..."
+        slide1.descriptionOfWeather.text = " "
         
         
  
          slide1.mainLabel.text = "Tomorrow's Weather"
         slide2.degrees.text = "Loading..."
+         slide2.descriptionOfWeather.text = " "
         
         
         return [slide2, slide1]
@@ -115,7 +126,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
         startLoad()
         startLoad2()
         
-        startLoad4()
+        //startLoad4()
         startLoad5()
         startLoad6()
         
@@ -522,11 +533,27 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
                 if let properties = json?["properties"] as? [String:Any] {
                     print("properties:")
                     print(properties)
-                    if let urlForAPIForecast = properties["forecastHourly"] as? String {
-                        print("urlForAPIForecast:")
-                        print(urlForAPIForecast)
-                        self.URLForNationalWeatherServiceForecast = urlForAPIForecast
+                    if let periods = properties["periods"] as? NSArray  {
+                        print("periods class")
+                        print(type(of: periods))
+                        print("periods:")
+                        print(periods)
+                        print("periods[23]:")
+                        print(periods[23])
+                        print("periods[23] type:")
+                       print(type(of: periods[23]))
+                        print("periods[23][\"shortForecast\"]:")
+                        if let dictionaryOfForecast = periods[23] as? NSDictionary {
+                            print(dictionaryOfForecast["shortForecast"] ?? "did not work dictionary in 6")
+                            DispatchQueue.main.async {
+                                self.slide1.descriptionOfWeather.text = dictionaryOfForecast["shortForecast"] as? String
+                                
+                                if let degrees = dictionaryOfForecast["temperature"] as? NSNumber {
+                                    self.slide1.degrees.text = degrees.stringValue + " Degrees F"
+                                }
+                            }
                         
+                        }
                         
                     }
                     
@@ -555,7 +582,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, CLLocationManagerD
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("hi")
+    
         let pageIndex = round(scrollView.contentOffset.x/view.frame.width)
         pageControl.currentPage = Int(pageIndex)
    
